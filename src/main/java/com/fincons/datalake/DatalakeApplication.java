@@ -12,23 +12,5 @@ public class DatalakeApplication {
 
   public static void main(String[] args) {
     ApplicationContext applicationContext = SpringApplication.run(DatalakeApplication.class, args);
-
-    InserimentoAnagraficaCentrale inserimentoAnagraficaCentrale =
-        applicationContext.getBean(InserimentoAnagraficaCentrale.class);
-    InserimentoVita inserimentoVita =
-            applicationContext.getBean(InserimentoVita.class);
-    ComComNaturalPersonRepository comComNaturalPersonRepository = applicationContext.getBean(ComComNaturalPersonRepository.class);
-
-    // FISICA
-    for (int i = 1; i < 11; i++) {
-      inserimentoVita.pf();
-    }
-
-    // GIURIDICA
-    for (int i = 11; i < 21; i++) {
-      inserimentoVita.pg();
-    }
-
   }
-
 }
