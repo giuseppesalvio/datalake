@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import static com.fincons.datalake.service.Constant.CF;
 import static com.fincons.datalake.service.Constant.PIVA;
+import static com.fincons.datalake.service.InserimentoVita.IMPRESA_SRL;
 
 @Service
 public class InserimentoAnagraficaCentrale {
@@ -33,7 +34,7 @@ public class InserimentoAnagraficaCentrale {
 
 
   private Integer getEcid() {
-    Integer ecid = comComNaturalPersonRepository.findMaxEcid();
+    Integer ecid = comComMasterDataRepository.findMaxEcid();
     if(ecid==null)
       ecid = 1;
     else{
@@ -65,7 +66,7 @@ public class InserimentoAnagraficaCentrale {
   }
 
   private static ComComLegalpersonEntity getPersonaGiuridica(int ecid) {
-    return ComComLegalpersonEntity.builder().id(ecid).ecid(ecid).denomination("Impresa srl " + ecid).build();
+    return ComComLegalpersonEntity.builder().id(ecid).ecid(ecid).denomination(IMPRESA_SRL + ecid).build();
   }
 
   private static ComComNaturalpersonEntity getPersonaFisica(int ecid) {

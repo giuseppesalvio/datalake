@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ComComNaturalPersonRepository extends CrudRepository<ComComNaturalpersonEntity, Integer> {
-    @Query(value = "SELECT max(ecid) FROM ComComNaturalpersonEntity ")
-    Integer findMaxEcid();
+
 }
