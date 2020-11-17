@@ -243,7 +243,7 @@ CREATE TABLE PAINDIRIZZO
               DUPDCPRATIO         DATE           NULL,
               BPRIVACYCOMMERCIALE DECIMAL(1, 0)  NULL,
               PRIMARY KEY (
-                           IDPOLIZZA,
+                           IDPOLIZZA/*,
                            EMOTIVOCREAZIONE,
                            CDESCRIZIONE,
                            BPOLIZZA,
@@ -253,7 +253,7 @@ CREATE TABLE PAINDIRIZZO
                            IDUSERINS,
                            IDUSERAGG,
                            BDANNI,
-                           BVITA
+                           BVITA*/
                   )
           );
 		  DROP TABLE IF EXISTS  PCPOLIZZARUOLO;
