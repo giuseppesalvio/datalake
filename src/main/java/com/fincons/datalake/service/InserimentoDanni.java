@@ -17,6 +17,7 @@ public class InserimentoDanni {
     public static final String ROSSI = "Rossi ";
     public static final int IDTOPONIMO = 123;
     private static final Integer IDRESIDENZA = 55;
+    public static final String CODFISCALE = "RSSMRA";
 
     @Autowired
     PadatisingoliRepository paDatiSingoliRepository;
@@ -41,25 +42,23 @@ public class InserimentoDanni {
 
 
     public void pf(Integer ecidContraente) {
-
         Integer codicePaDatiSingoli = getCodice(paDatiSingoliRepository);
-        Integer codicePaIndirizzo = getCodice(paIndirizzoRepository);
         Integer codicePaSoggetto = getCodice(paSoggettoRepository);
         Integer codicePasoggettolock = getCodice(paSoggettoLockRepository);
+        paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente));
+        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, 1));//1 per fisico 2 per giuridico
+        paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, 0)); //codicePaIndirizzo va preso dal commander?
+
         Integer codicePcRuolo = getCodice(pcRuoloRepository);
         Integer codicePcPolizza = getCodice(pcPolizzaRepository);
-        Integer codicePgTitolo = getCodice(pgtitoloRepository);
-        Integer codicePcMovimento = getCodice(pcmovimentoRepository);
-
-        paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente));
-        paIndirizzoRepository.save(getPaIndirizzo(codicePaIndirizzo));
-        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli));
-        paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, codicePaIndirizzo));
         pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
         pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
         pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
+
+        Integer codicePgTitolo = getCodice(pgtitoloRepository);
         pgtitoloRepository.save(getPgTitolo(codicePgTitolo));
-        /*da capire le chiavi di pcmovimento e pcversione*/
+
+        Integer codicePcMovimento = getCodice(pcmovimentoRepository);
         pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
         pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
     }
@@ -68,7 +67,7 @@ public class InserimentoDanni {
         return PcversioneEntity.builder()
                 .idpolizza(codicePcPolizza)
                 .nverinizio(getRandom(0, 999999998))
-                .nverfine(999999999)
+                .nverfine(999999999) //BigDecimal.getValue()
                 .idpvgestione(0)
                 .etipocoass(0)
                 .build();
@@ -138,11 +137,12 @@ public class InserimentoDanni {
                 .build();
     }
 
-    private PasoggettoEntity getPaSoggetto(Integer codicePaSoggetto, Integer codicePaDatiSingoli) {
+    private PasoggettoEntity getPaSoggetto(Integer codicePaSoggetto, Integer codicePaDatiSingoli, Integer tipo) {
         return PasoggettoEntity.builder()
-                .ccodicefiscale("RSSMRA" + codicePaSoggetto)
+                .ccodicefiscale(CODFISCALE + codicePaSoggetto)
                 .iddatisingoli(codicePaDatiSingoli)
                 .idsoggetto(codicePaSoggetto)
+                .etiposoggetto(tipo)
                 .build();
     }
 

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PgtitoloRepository extends FindMaxIdInterface, CrudRepository<PgtitoloEntity, Integer> {
-        @Query(value = "SELECT max(idgruppotitoli) FROM PgtitoloEntity ")
+        @Query(value = "SELECT max(idtitolo) FROM PgtitoloEntity ")
         Integer findMaxId();
     }

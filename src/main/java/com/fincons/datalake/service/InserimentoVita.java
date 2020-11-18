@@ -38,7 +38,7 @@ public class InserimentoVita {
     @Autowired
     private Vttab024Repository posizioniVita;
     @Autowired
-    private InserimentoAnagraficaCentrale inserimentoAnagraficaCentrale;
+    private InserimentoCommander inserimentoCommander;
 
 
     public void pg() {
@@ -46,7 +46,7 @@ public class InserimentoVita {
         int codicePolizzaVita = getCodicePolizzaVita();
         Date dataDecorrenza = getDateDecorrenza();
 
-        Integer ecidContraente = inserimentoAnagraficaCentrale.pg();
+        Integer ecidContraente = inserimentoCommander.pg();
         polizaVitaRepository.save(
                 getPolizzaPersonaGiuridica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
         inserisciContraentePG(ecidContraente, codiceContraenteVita);
@@ -60,7 +60,7 @@ public class InserimentoVita {
         int codicePolizzaVita = getCodicePolizzaVita();
         Date dataDecorrenza = getDateDecorrenza();
 
-        Integer ecidContraente = inserimentoAnagraficaCentrale.pf();
+        Integer ecidContraente = inserimentoCommander.pf();
         polizaVitaRepository.save(
                 getPolizzaPersonaFisica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
         inserisciContraente(ecidContraente, codiceContraenteVita);
@@ -113,7 +113,7 @@ public class InserimentoVita {
     }
 
     private void inserisciAltro(int codiceClienteVita) {
-        int ecid = inserimentoAnagraficaCentrale.pf();
+        int ecid = inserimentoCommander.pf();
         personaVitaRepository.save(getPersonaFisica(ecid, codiceClienteVita));
         personaVitaEstesaRepository.save(getPersonaFisicaEstesa(ecid, codiceClienteVita));
     }
