@@ -1,5 +1,9 @@
 package com.fincons.datalake.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;

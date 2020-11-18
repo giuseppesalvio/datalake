@@ -24,10 +24,12 @@ import static com.fincons.datalake.service.Constant.PIVA;
 public class InserimentoVita {
     public static final String IMPRESA_SRL = "impresa srl ";
     public static final String VIA_ROMA = "via Roma ";
-  public static final String VERONA = "Verona";
-  public static final int CAP = 37120;
-  public static final String VR = "VR";
-  @Autowired
+    public static final String VERONA = "Verona";
+    public static final int CAP = 37120;
+    public static final String VR = "VR";
+    public static final String MARIO = "Mario ";
+    public static final String ROSSI = "Rossi ";
+    @Autowired
     private Vttab200Repository personaVitaRepository;
     @Autowired
     private Vttab201Repository personaVitaEstesaRepository;
@@ -53,7 +55,7 @@ public class InserimentoVita {
     }
 
 
-    public void pf() {
+    public Integer pf() {
         int codiceContraenteVita = getCodiceClienteVita();
         int codicePolizzaVita = getCodicePolizzaVita();
         Date dataDecorrenza = getDateDecorrenza();
@@ -64,6 +66,7 @@ public class InserimentoVita {
         inserisciContraente(ecidContraente, codiceContraenteVita);
         inserisciAltreFigure(codiceContraenteVita);
         inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
+        return ecidContraente;
     }
 
     private Date getDateDecorrenza() {
@@ -150,8 +153,8 @@ public class InserimentoVita {
         return Vttab201Entity.builder()
                 .t201Codsoc(341)
                 .t201Codcli(codiceClienteVita) // stesso della 201
-                .t201Nome("Mario " + ecidContraente)
-                .t201Cognome("Rossi " + ecidContraente)
+                .t201Nome(MARIO + ecidContraente)
+                .t201Cognome(ROSSI + ecidContraente)
                 .build();
     }
 
@@ -168,7 +171,7 @@ public class InserimentoVita {
         return Vttab200Entity.builder()
                 .t200Codsoc(341)
                 .t200Codfisc(CF + ecidContraente)
-                .t200Nominativo("Mario " + ecidContraente + " Rossi " + ecidContraente)
+                .t200Nominativo(MARIO + ecidContraente + " Rossi " + ecidContraente)
                 .t200Codcli(codiceClienteVita) // stesso della 201
                 .t200Codcommander(ecidContraente)
                 .t200Indirizzo(VIA_ROMA + ecidContraente)
@@ -233,7 +236,7 @@ public class InserimentoVita {
                 .t022Agenzia("")
                 .t022NumColl(0)
                 .t022NumPolizza(codicePolizzaVita)
-                .t022Nominativo("Mario " + ecidContraente + " Rossi " + 1)
+                .t022Nominativo(MARIO + ecidContraente + " Rossi " + 1)
                 .t022Stato(randomStato())
                 .t022CodContr(codiceContraenteVita)
                 .t022Decorrenza(dataDecorrenza)

@@ -1,7 +1,6 @@
 package com.fincons.datalake.repository;
 
 import com.fincons.datalake.entity.ComComMasterdataEntity;
-import com.fincons.datalake.entity.ComComNaturalpersonEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

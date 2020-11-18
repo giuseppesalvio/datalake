@@ -11,5 +11,5 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface Vttab200Repository extends CrudRepository<Vttab200Entity, Vttab200EntityPK> {
     @Query(value = "SELECT max(t200Codcli) FROM Vttab200Entity ")
-    Integer findMaxNumCliente();;
+    Integer findMaxNumCliente();
 }
