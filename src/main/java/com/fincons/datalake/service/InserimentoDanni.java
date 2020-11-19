@@ -18,6 +18,8 @@ public class InserimentoDanni {
     public static final int IDTOPONIMO = 123;
     private static final Integer IDRESIDENZA = 55;
     public static final String CODFISCALE = "RSSMRA";
+    public static final int TIPO_PF_DANNI = 1;
+    public static final int TIPO_PG_DANNI = 2;
 
     @Autowired
     PadatisingoliRepository paDatiSingoliRepository;
@@ -71,20 +73,20 @@ public class InserimentoDanni {
     }
 
     private void inserimentoMovimentoVersione(Integer codicePcPolizza, Integer codicePgTitolo) {
-        Integer codicePcMovimento = getCodice(pcmovimentoRepository);
+        Integer codicePcMovimento = getMaxIdDiTabella(pcmovimentoRepository);
         pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
         pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
     }
 
     private Integer inserimentoTitolo() {
-        Integer codicePgTitolo = getCodice(pgtitoloRepository);
+        Integer codicePgTitolo = getMaxIdDiTabella(pgtitoloRepository);
         pgtitoloRepository.save(getPgTitolo(codicePgTitolo));
         return codicePgTitolo;
     }
 
     private Integer inserimentoPolizzaRuolo(Integer codicePasoggettolock) {
-        Integer codicePcRuolo = getCodice(pcRuoloRepository);
-        Integer codicePcPolizza = getCodice(pcPolizzaRepository);
+        Integer codicePcRuolo = getMaxIdDiTabella(pcRuoloRepository);
+        Integer codicePcPolizza = getMaxIdDiTabella(pcPolizzaRepository);
         pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
         pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
         pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
@@ -92,21 +94,21 @@ public class InserimentoDanni {
     }
 
     private Integer inserimentoDatiAnagraficiGiuridica(Integer ecidContraente) {
-        Integer codicePaDatiSingoli = getCodice(paDatiSingoliRepository);
-        Integer codicePaSoggetto = getCodice(paSoggettoRepository);
-        Integer codicePasoggettolock = getCodice(paSoggettoLockRepository);
+        Integer codicePaDatiSingoli = getMaxIdDiTabella(paDatiSingoliRepository);
+        Integer codicePaSoggetto = getMaxIdDiTabella(paSoggettoRepository);
+        Integer codicePasoggettolock = getMaxIdDiTabella(paSoggettoLockRepository);
         paDatiSingoliRepository.save(getPadatisingoliG(codicePaDatiSingoli, ecidContraente));
-        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, 2));//1 per fisico 2 per giuridico
+        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, TIPO_PG_DANNI));//1 per fisico 2 per giuridico
         paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, 0)); //codicePaIndirizzo va preso dal commander?
         return codicePasoggettolock;
     }
 
     private Integer inserimentoDatiAnagraficiFisica(Integer ecidContraente) {
-        Integer codicePaDatiSingoli = getCodice(paDatiSingoliRepository);
-        Integer codicePaSoggetto = getCodice(paSoggettoRepository);
-        Integer codicePasoggettolock = getCodice(paSoggettoLockRepository);
+        Integer codicePaDatiSingoli = getMaxIdDiTabella(paDatiSingoliRepository);
+        Integer codicePaSoggetto = getMaxIdDiTabella(paSoggettoRepository);
+        Integer codicePasoggettolock = getMaxIdDiTabella(paSoggettoLockRepository);
         paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente));
-        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, 1));//1 per fisico 2 per giuridico
+        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, TIPO_PF_DANNI));//1 per fisico 2 per giuridico
         paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, 0)); //codicePaIndirizzo va preso dal commander?
         return codicePasoggettolock;
     }
@@ -194,7 +196,7 @@ public class InserimentoDanni {
                 .build();
     }
 
-    private Integer getCodice(FindMaxIdInterface repository) {
+    private Integer getMaxIdDiTabella(FindMaxIdInterface repository) {
         Integer temp = repository.findMaxId();
         if (temp == null) {
             return 1111;

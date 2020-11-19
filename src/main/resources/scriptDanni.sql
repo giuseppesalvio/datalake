@@ -475,3 +475,5 @@ CREATE TABLE PAINDIRIZZO
               EMARKER            DECIMAL(18, 0) NULL,
               CMASTERPOLICY      VARCHAR(25)    NULL
           );
+
+

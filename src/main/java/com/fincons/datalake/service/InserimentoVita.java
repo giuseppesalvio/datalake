@@ -13,22 +13,16 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.fincons.datalake.service.Constant.CF;
-import static com.fincons.datalake.service.Constant.PIVA;
+import static com.fincons.datalake.service.Constant.*;
 
 @Service
 public class InserimentoVita {
-    public static final String IMPRESA_SRL = "impresa srl ";
-    public static final String VIA_ROMA = "via Roma ";
-    public static final String VERONA = "Verona";
-    public static final int CAP = 37120;
-    public static final String VR = "VR";
-    public static final String MARIO = "Mario ";
-    public static final String ROSSI = "Rossi ";
+
     @Autowired
     private Vttab200Repository personaVitaRepository;
     @Autowired
@@ -40,19 +34,22 @@ public class InserimentoVita {
     @Autowired
     private InserimentoCommander inserimentoCommander;
 
-
     public Integer pg() {
         int codiceContraenteVita = getCodiceClienteVita();
         int codicePolizzaVita = getCodicePolizzaVita();
         Date dataDecorrenza = getDateDecorrenza();
 
         Integer ecidContraente = inserimentoCommander.pg();
-        polizaVitaRepository.save(
-                getPolizzaPersonaGiuridica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
+        inserisciPolizzaVitaPG(codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
         inserisciContraentePG(ecidContraente, codiceContraenteVita);
         inserisciAltreFigure(codiceContraenteVita);
         inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
         return ecidContraente;
+    }
+
+    private void inserisciPolizzaVitaPG(int codiceContraenteVita, int codicePolizzaVita, Date dataDecorrenza, Integer ecidContraente) {
+        polizaVitaRepository.save(
+                getPolizzaPersonaGiuridica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
     }
 
 
@@ -62,18 +59,35 @@ public class InserimentoVita {
         Date dataDecorrenza = getDateDecorrenza();
 
         Integer ecidContraente = inserimentoCommander.pf();
-        polizaVitaRepository.save(
-                getPolizzaPersonaFisica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
+        inserisciPolizzaVitaPF(codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
         inserisciContraente(ecidContraente, codiceContraenteVita);
-        inserisciAltreFigure(codiceContraenteVita);
+        //inserisciAltreFigure(codiceContraenteVita);
         inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
         return ecidContraente;
     }
 
+    private void inserisciPolizzaVitaPF(int codiceContraenteVita, int codicePolizzaVita, Date dataDecorrenza, Integer ecidContraente) {
+        polizaVitaRepository.save(
+                getPolizzaPersonaFisica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
+    }
+
     private Date getDateDecorrenza() {
-        Date d1 = new Date(1970, 01, 01);
-        Date d2 = new Date(2020, 11, 11);
-        return new Date(ThreadLocalRandom.current().nextLong(d1.getTime(), d2.getTime()));
+        int minDay = (int) LocalDate.of(1970, 1, 1).toEpochDay();
+        int maxDay = (int) LocalDate.of(2020, 11, 11).toEpochDay();
+        Random random = new Random();
+        long randomDay = minDay + random.nextInt(maxDay - minDay);
+        return Date.valueOf(LocalDate.ofEpochDay(randomDay));
+    }
+
+
+    public static LocalDate between(LocalDate startInclusive, LocalDate endExclusive) {
+        long startEpochDay = startInclusive.toEpochDay();
+        long endEpochDay = endExclusive.toEpochDay();
+        long randomDay = ThreadLocalRandom
+                .current()
+                .nextLong(startEpochDay, endEpochDay);
+
+        return LocalDate.ofEpochDay(randomDay);
     }
 
     private void inserisciAltreFigure(int codiceContraenteVita) {
@@ -121,25 +135,25 @@ public class InserimentoVita {
 
 
     private void inserisciPosizioni(int codicePolizzaVita, Date dataDecorrenza) {
-        for (int j = 0; j < getRandomNumber(1, 10); j++) {
+        for (int j = 1; j < getRandomNumber(2, MAX_NUMERO_POSIZIONI); j++) {
             Vttab024Entity posizione =
                     Vttab024Entity.builder()
                             .t024Codsoc(341)
                             .t024Categoria("11")
                             .t024Agenzia("")
                             .t024Posizione((short) j)
-                            .t024PrestRiv(BigDecimal.valueOf(getRandomNumber(1000, 50000)))
+                            .t024PrestRiv(BigDecimal.valueOf(getRandomNumber(MIN_RANDOM_PRICE, MAX_RANDOM_PRICE)))
                             .t024NumColl(0)
                             .t024NumPolizza(codicePolizzaVita)
-                            .t024PremioNetto(BigDecimal.valueOf(getRandomNumber(1000, 50000)))
-                            .t024PremioPuro(BigDecimal.valueOf(getRandomNumber(1000, 50000)))
-                            .t024PremioRata(BigDecimal.valueOf(getRandomNumber(1000, 50000)))
+                            .t024PremioNetto(BigDecimal.valueOf(getRandomNumber(MIN_RANDOM_PRICE, MAX_RANDOM_PRICE)))
+                            .t024PremioPuro(BigDecimal.valueOf(getRandomNumber(MIN_RANDOM_PRICE, MAX_RANDOM_PRICE)))
+                            .t024PremioRata(BigDecimal.valueOf(getRandomNumber(MIN_RANDOM_PRICE, MAX_RANDOM_PRICE)))
                             .t024Cab("21202")
                             .t024ContoCorr("000012345678")
                             .t024Categoria("11")
                             .t024Causale("51")
                             .t024Decorrenza(dataDecorrenza)
-                            .t024CodiceUt(String.valueOf(getRandomNumber(1, 10000)))
+                            .t024CodiceUt(String.valueOf(getRandomNumber(MIN_RANDOM_CODICE_UT, MAX_RANDOM_CODICE_UT)))
                             .t024Stato(randomStato())
                             .build();
             posizioniVita.save(posizione);
