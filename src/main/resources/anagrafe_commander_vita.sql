@@ -1,4 +1,6 @@
-select masterD.ECID , identification.IDENTIFICATION ,naturalP.NAME,naturalP.SURNAME,legalP.DENOMINATION,address.territoryid,ter.id,adminarea1,ter.adminarea2,ter.adminarea3,ter.adminarea4,personaVita.T200_CODCLI,polizaVita.T022_NUM_POLIZZA
+select masterD.ECID , identification.IDENTIFICATION ,naturalP.NAME,naturalP.SURNAME,legalP.DENOMINATION,address.territoryid,ter.id,adminarea1,ter.adminarea2,ter.adminarea3,ter.adminarea4,personaVita.T200_CODCLI,
+       polizaVita.T022_NUM_POLIZZA,
+       (select sum(t024_premio_rata) from VTTAB024 where t024_num_polizza =polizaVita.T022_NUM_POLIZZA) sommaRate
 from com_com_masterdata as masterD
          inner join com_com_identificationdata as identification on masterD.ECID = identification.ECID
          left join com_com_naturalperson as naturalP on naturalP.ECID = masterD.ECID
