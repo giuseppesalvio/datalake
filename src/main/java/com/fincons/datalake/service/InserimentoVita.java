@@ -40,7 +40,7 @@ public class InserimentoVita {
         Integer ecidContraente = inserimentoCommander.pg();
         inserisciPolizzaVitaPG(codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
         inserisciContraentePG(ecidContraente, codiceContraenteVita);
-        inserisciAltreFigure(codiceContraenteVita);
+        //inserisciAltreFigure(codiceContraenteVita);
         inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
         return ecidContraente;
     }
@@ -226,20 +226,20 @@ public class InserimentoVita {
                 .t022Agenzia("")
                 .t022NumColl(0)
                 .t022NumPolizza(codicePolizzaVita)
-                .t022Nominativo(NOME + ecidContraente + " Rossi " + 1)
+                .t022Nominativo(NOME + ecidContraente + COGNOME + ecidContraente)
                 .t022Stato(randomStato())
                 .t022CodContr(codiceContraenteVita)
                 .t022Decorrenza(dataDecorrenza)
                 .t022Emissione(new java.sql.Date(Calendar.getInstance().getTime().getTime()))
                 .t022UlFondo("")
-                .t022CodAssic(codiceContraenteVita + 1)
-                .t022CodAssic2(codiceContraenteVita + 2)
-                .t022CodBenv1(codiceContraenteVita + 3)
-                .t022CodBenv2(codiceContraenteVita + 4)
-                .t022CodBenm1(codiceContraenteVita + 5)
-                .t022CodBenm2(codiceContraenteVita + 6)
-                .t022CodLrapp1(codiceContraenteVita + 7)
-                .t022CodLrapp2(codiceContraenteVita + 8)
+//                .t022CodAssic(codiceContraenteVita + 1)
+//                .t022CodAssic2(codiceContraenteVita + 2)
+//                .t022CodBenv1(codiceContraenteVita + 3)
+//                .t022CodBenv2(codiceContraenteVita + 4)
+//                .t022CodBenm1(codiceContraenteVita + 5)
+//                .t022CodBenm2(codiceContraenteVita + 6)
+//                .t022CodLrapp1(codiceContraenteVita + 7)
+//                .t022CodLrapp2(codiceContraenteVita + 8)
                 .build();
     }
 
