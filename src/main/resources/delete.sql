@@ -12,7 +12,6 @@ delete from datalake.pcpolizza;
 delete from datalake.pcpolizzaruolo;
 delete from datalake.pcversione;
 delete from datalake.pgtitolo;
-delete from datalake.testanagrafica;
 delete from datalake.vttab022;
 delete from datalake.vttab024;
 delete from datalake.vttab200;
