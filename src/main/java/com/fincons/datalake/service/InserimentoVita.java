@@ -114,7 +114,7 @@ public class InserimentoVita {
 
 
     private void inserisciPosizioni(int codicePolizzaVita, Date dataDecorrenza) {
-        for (int j = 1; j < getRandomNumber(FOR_MIN_NUMERO_POSIZIONI, FOR_MAX_NUMERO_POSIZIONI); j++) {
+        for (int j = FOR_MIN_COUNTER_POSIZIONI; j < getRandomNumber(FOR_MIN_RANDOM_POSIZIONI, FOR_MAX_RANDOM_POSIZIONI); j++) {
             Vttab024Entity posizione =
                     Vttab024Entity.builder()
                             .t024Codsoc(341)
