@@ -26,6 +26,10 @@ public class Constant {
   public static final int TIPO_PF_DANNI = 1;
   public static final int TIPO_PG_DANNI = 2;
 
+  public static final int FOR_MIN_COUNTER_NUMERO_CONTRAENTI_X_POLIZZA = 1;
+  public static final int FOR_MIN_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA = 5;
+  public static final int FOR_MAX_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA = 5;
+
   public static final int FOR_MIN_COUNTER_POSIZIONI = 1;
   public static final int FOR_MIN_RANDOM_POSIZIONI = 2; // 20
   public static final int FOR_MAX_RANDOM_POSIZIONI = 3; // 30

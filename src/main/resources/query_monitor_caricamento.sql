@@ -14,4 +14,4 @@ select 'pgtitolo',count(*) from datalake.pgtitolo union
 select 'vttab022',count(*) from datalake.vttab022 union
 select 'vttab024',count(*) from datalake.vttab024 union
 select 'vttab200',count(*) from datalake.vttab200 union
-select 'vttab201',count(*) from datalake.vttab201
+select 'vttab201',count(*) from datalake.vttab201;
