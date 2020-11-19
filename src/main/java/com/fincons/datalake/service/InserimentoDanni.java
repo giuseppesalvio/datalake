@@ -11,11 +11,9 @@ import java.sql.Date;
 @Service
 public class InserimentoDanni {
     public static final String IMPRESA_SRL = "impresa srl ";
-    public static final int CAP = 37120;
     public static final String VR = "VR";
     public static final String MARIO = "Mario ";
     public static final String ROSSI = "Rossi ";
-    public static final int IDTOPONIMO = 123;
     private static final Integer IDRESIDENZA = 55;
     public static final String CODFISCALE = "RSSMRA";
     public static final int TIPO_PF_DANNI = 1;
@@ -204,16 +202,6 @@ public class InserimentoDanni {
         return temp + 1;
     }
 
-    private PaindirizzoEntity getPaIndirizzo(Integer codicePaindirizzo) {
-        return PaindirizzoEntity.builder()
-                .idindirizzo(codicePaindirizzo)
-                .cprovincia(VR)
-                .ccap(String.valueOf(CAP))
-                .idtoponimo(IDTOPONIMO)
-                .build();
-    }
-
-
     private static PadatisingoliEntity getPadatisingoliF(Integer idcontraente, Integer ecidContraente) {
         return PadatisingoliEntity.builder()
                 .iddatisingoli(idcontraente)
@@ -229,22 +217,6 @@ public class InserimentoDanni {
                 .cdenominazione(IMPRESA_SRL + ecidContraente)
                 .necid(ecidContraente)
                 .build();
-    }
-
-    private Integer getPaDatiSingoli() {
-        Integer temp = paDatiSingoliRepository.findMaxId();
-        if (temp == null) {
-            return 3333;
-        }
-        return temp + 1;
-    }
-
-    private Integer getCodicePaIndirizzo() {
-        Integer temp = paIndirizzoRepository.findMaxId();
-        if (temp == null) {
-            return 3333;
-        }
-        return temp + 1;
     }
 
     private Integer getRandom(int min, int max) {
