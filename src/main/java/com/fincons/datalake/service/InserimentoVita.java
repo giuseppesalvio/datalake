@@ -37,7 +37,7 @@ public class InserimentoVita {
     public Integer pg() {
         int codiceContraenteVita = getCodiceClienteVita();
         int codicePolizzaVita = getCodicePolizzaVita();
-        Date dataDecorrenza = getDateDecorrenza();
+        Date dataDecorrenza = getRandomDate();
 
         Integer ecidContraente = inserimentoCommander.pg();
         inserisciPolizzaVitaPG(codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
@@ -56,7 +56,7 @@ public class InserimentoVita {
     public Integer pf() {
         int codiceContraenteVita = getCodiceClienteVita();
         int codicePolizzaVita = getCodicePolizzaVita();
-        Date dataDecorrenza = getDateDecorrenza();
+        Date dataDecorrenza = getRandomDate();
 
         Integer ecidContraente = inserimentoCommander.pf();
         inserisciPolizzaVitaPF(codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
@@ -69,25 +69,6 @@ public class InserimentoVita {
     private void inserisciPolizzaVitaPF(int codiceContraenteVita, int codicePolizzaVita, Date dataDecorrenza, Integer ecidContraente) {
         polizaVitaRepository.save(
                 getPolizzaPersonaFisica(ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
-    }
-
-    private Date getDateDecorrenza() {
-        int minDay = (int) LocalDate.of(1970, 1, 1).toEpochDay();
-        int maxDay = (int) LocalDate.of(2020, 11, 11).toEpochDay();
-        Random random = new Random();
-        long randomDay = minDay + random.nextInt(maxDay - minDay);
-        return Date.valueOf(LocalDate.ofEpochDay(randomDay));
-    }
-
-
-    public static LocalDate between(LocalDate startInclusive, LocalDate endExclusive) {
-        long startEpochDay = startInclusive.toEpochDay();
-        long endEpochDay = endExclusive.toEpochDay();
-        long randomDay = ThreadLocalRandom
-                .current()
-                .nextLong(startEpochDay, endEpochDay);
-
-        return LocalDate.ofEpochDay(randomDay);
     }
 
     private void inserisciAltreFigure(int codiceContraenteVita) {
@@ -160,16 +141,12 @@ public class InserimentoVita {
         }
     }
 
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
     private Vttab201Entity getPersonaFisicaEstesa(int ecidContraente, int codiceClienteVita) {
         return Vttab201Entity.builder()
                 .t201Codsoc(341)
                 .t201Codcli(codiceClienteVita) // stesso della 201
-                .t201Nome(MARIO + ecidContraente)
-                .t201Cognome(ROSSI + ecidContraente)
+                .t201Nome(NOME + ecidContraente)
+                .t201Cognome(COGNOME + ecidContraente)
                 .build();
     }
 
@@ -186,17 +163,17 @@ public class InserimentoVita {
         return Vttab200Entity.builder()
                 .t200Codsoc(341)
                 .t200Codfisc(CF + ecidContraente)
-                .t200Nominativo(MARIO + ecidContraente + " Rossi " + ecidContraente)
+                .t200Nominativo(NOME + ecidContraente + " Rossi " + ecidContraente)
                 .t200Codcli(codiceClienteVita) // stesso della 201
                 .t200Codcommander(ecidContraente)
-                .t200Indirizzo(VIA_ROMA + ecidContraente)
-                .t200IndirizzoD(VIA_ROMA + ecidContraente)
+                .t200Indirizzo(VIA + ecidContraente)
+                .t200IndirizzoD(VIA + ecidContraente)
                 .t200Localita(VERONA + ecidContraente)
                 .t200LocalitaD(VERONA + ecidContraente)
                 .t200Cap(CAP)
                 .t200CapD(String.valueOf(CAP))
-                .t200Provincia(VR)
-                .t200ProvinciaD(VR)
+                .t200Provincia(PROVINCIA)
+                .t200ProvinciaD(PROVINCIA)
                 .build();
     }
 
@@ -207,14 +184,14 @@ public class InserimentoVita {
                 .t200Nominativo(IMPRESA_SRL + ecidContraente)
                 .t200Codcli(codiceClienteVita) // stesso della 201
                 .t200Codcommander(ecidContraente)
-                .t200Indirizzo(VIA_ROMA + ecidContraente)
-                .t200IndirizzoD(VIA_ROMA + ecidContraente)
+                .t200Indirizzo(VIA + ecidContraente)
+                .t200IndirizzoD(VIA + ecidContraente)
                 .t200Localita(VERONA + ecidContraente)
                 .t200LocalitaD(VERONA + ecidContraente)
                 .t200Cap(CAP)
                 .t200CapD(String.valueOf(CAP))
-                .t200Provincia(VR)
-                .t200ProvinciaD(VR)
+                .t200Provincia(PROVINCIA)
+                .t200ProvinciaD(PROVINCIA)
                 .build();
     }
 
@@ -251,7 +228,7 @@ public class InserimentoVita {
                 .t022Agenzia("")
                 .t022NumColl(0)
                 .t022NumPolizza(codicePolizzaVita)
-                .t022Nominativo(MARIO + ecidContraente + " Rossi " + 1)
+                .t022Nominativo(NOME + ecidContraente + " Rossi " + 1)
                 .t022Stato(randomStato())
                 .t022CodContr(codiceContraenteVita)
                 .t022Decorrenza(dataDecorrenza)
