@@ -16,6 +16,7 @@ public class AllController {
     @GetMapping("/riempiDb")
     public void riempiDb(){
         // FISICA
+
         for (int i = 1; i < 11; i++) {
             Integer ecidContraente = inserimentoVita.pf();
             inserimentoDanni.pf(ecidContraente);
@@ -23,7 +24,8 @@ public class AllController {
 
         // GIURIDICA
         for (int i = 11; i < 21; i++) {
-            inserimentoVita.pg();
+            Integer ecidContraente = inserimentoVita.pg();
+            inserimentoDanni.pg(ecidContraente);
         }
     }
 }

@@ -42,25 +42,73 @@ public class InserimentoDanni {
 
 
     public void pf(Integer ecidContraente) {
+        Integer codicePasoggettolock = inserimentoDatiAnagraficiFisica(ecidContraente);
+        Integer codicePcPolizza = inserimentoPolizzaRuolo(codicePasoggettolock);
+        inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
+    }
+
+    public void pg(Integer ecidContraente) {
+        Integer codicePasoggettolock = inserimentoDatiAnagraficiGiuridica(ecidContraente);
+        Integer codicePcPolizza = inserimentoPolizzaRuolo(codicePasoggettolock);
+        inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
+    }
+
+
+
+    private void inserisciNumeroCasualeTitoliMovimenti(Integer codicePcPolizza) {
+        int numeroTitoli = (int) (20 + (Math.random() * 30));
+        for (int i = 0; i < numeroTitoli; i++) {
+            Integer codicePgTitolo = inserimentoTitolo();
+            inserisciNumeroCasualeMovimenti(codicePcPolizza, codicePgTitolo);
+        }
+    }
+
+    private void inserisciNumeroCasualeMovimenti(Integer codicePcPolizza, Integer codicePgTitolo) {
+        int numeroMovimenti = (int) (20 + (Math.random() * 30));
+        for (int j = 0; j < numeroMovimenti; j++) {
+            inserimentoMovimentoVersione(codicePcPolizza, codicePgTitolo);
+        }
+    }
+
+    private void inserimentoMovimentoVersione(Integer codicePcPolizza, Integer codicePgTitolo) {
+        Integer codicePcMovimento = getCodice(pcmovimentoRepository);
+        pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
+        pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
+    }
+
+    private Integer inserimentoTitolo() {
+        Integer codicePgTitolo = getCodice(pgtitoloRepository);
+        pgtitoloRepository.save(getPgTitolo(codicePgTitolo));
+        return codicePgTitolo;
+    }
+
+    private Integer inserimentoPolizzaRuolo(Integer codicePasoggettolock) {
+        Integer codicePcRuolo = getCodice(pcRuoloRepository);
+        Integer codicePcPolizza = getCodice(pcPolizzaRepository);
+        pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
+        pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
+        pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
+        return codicePcPolizza;
+    }
+
+    private Integer inserimentoDatiAnagraficiGiuridica(Integer ecidContraente) {
+        Integer codicePaDatiSingoli = getCodice(paDatiSingoliRepository);
+        Integer codicePaSoggetto = getCodice(paSoggettoRepository);
+        Integer codicePasoggettolock = getCodice(paSoggettoLockRepository);
+        paDatiSingoliRepository.save(getPadatisingoliG(codicePaDatiSingoli, ecidContraente));
+        paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, 2));//1 per fisico 2 per giuridico
+        paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, 0)); //codicePaIndirizzo va preso dal commander?
+        return codicePasoggettolock;
+    }
+
+    private Integer inserimentoDatiAnagraficiFisica(Integer ecidContraente) {
         Integer codicePaDatiSingoli = getCodice(paDatiSingoliRepository);
         Integer codicePaSoggetto = getCodice(paSoggettoRepository);
         Integer codicePasoggettolock = getCodice(paSoggettoLockRepository);
         paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente));
         paSoggettoRepository.save(getPaSoggetto(codicePaSoggetto, codicePaDatiSingoli, 1));//1 per fisico 2 per giuridico
         paSoggettoLockRepository.save(getPaSoggettoLock(codicePasoggettolock, codicePaSoggetto, codicePaDatiSingoli, IDRESIDENZA, 0)); //codicePaIndirizzo va preso dal commander?
-
-        Integer codicePcRuolo = getCodice(pcRuoloRepository);
-        Integer codicePcPolizza = getCodice(pcPolizzaRepository);
-        pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
-        pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
-        pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
-
-        Integer codicePgTitolo = getCodice(pgtitoloRepository);
-        pgtitoloRepository.save(getPgTitolo(codicePgTitolo));
-
-        Integer codicePcMovimento = getCodice(pcmovimentoRepository);
-        pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
-        pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
+        return codicePasoggettolock;
     }
 
     private PcversioneEntity getPcVersione(Integer codicePcPolizza, Integer codicePcMovimento) {

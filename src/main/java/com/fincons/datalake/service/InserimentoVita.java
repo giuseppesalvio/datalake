@@ -41,7 +41,7 @@ public class InserimentoVita {
     private InserimentoCommander inserimentoCommander;
 
 
-    public void pg() {
+    public Integer pg() {
         int codiceContraenteVita = getCodiceClienteVita();
         int codicePolizzaVita = getCodicePolizzaVita();
         Date dataDecorrenza = getDateDecorrenza();
@@ -52,6 +52,7 @@ public class InserimentoVita {
         inserisciContraentePG(ecidContraente, codiceContraenteVita);
         inserisciAltreFigure(codiceContraenteVita);
         inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
+        return ecidContraente;
     }
 
 
