@@ -43,13 +43,13 @@ public class InserimentoDanni {
 
     public void pf(Integer ecidContraente) {
         Integer codicePasoggettolock = inserimentoDatiAnagraficiFisica(ecidContraente);
-        Integer codicePcPolizza = inserimentoPolizzaRuolo(codicePasoggettolock);
+        Integer codicePcPolizza = inserimentoPolizzaE_Ruolo(codicePasoggettolock);
         inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
     }
 
     public void pg(Integer ecidContraente) {
         Integer codicePasoggettolock = inserimentoDatiAnagraficiGiuridica(ecidContraente);
-        Integer codicePcPolizza = inserimentoPolizzaRuolo(codicePasoggettolock);
+        Integer codicePcPolizza = inserimentoPolizzaE_Ruolo(codicePasoggettolock);
         inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
     }
 
@@ -82,7 +82,7 @@ public class InserimentoDanni {
         return codicePgTitolo;
     }
 
-    private Integer inserimentoPolizzaRuolo(Integer codicePasoggettolock) {
+    private Integer inserimentoPolizzaE_Ruolo(Integer codicePasoggettolock) {
         Integer codicePcRuolo = getMaxIdDiTabella(pcRuoloRepository);
         Integer codicePcPolizza = getMaxIdDiTabella(pcPolizzaRepository);
         pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));

@@ -5,10 +5,7 @@ import com.fincons.datalake.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-
 import static com.fincons.datalake.service.Constant.*;
-import static com.fincons.datalake.service.Constant.getRandomDate;
 
 @Service
 public class InserimentoCommander {
