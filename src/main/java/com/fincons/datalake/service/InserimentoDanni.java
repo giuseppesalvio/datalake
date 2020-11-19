@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.sql.Date;
 
+import static com.fincons.datalake.service.Constant.*;
+
 @Service
 public class InserimentoDanni {
     public static final String IMPRESA_SRL = "impresa srl ";
@@ -56,16 +58,16 @@ public class InserimentoDanni {
 
 
     private void inserisciNumeroCasualeTitoliMovimenti(Integer codicePcPolizza) {
-        int numeroTitoli = (int) (20 + (Math.random() * 30));
-        for (int i = 0; i < numeroTitoli; i++) {
+        int numeroTitoli = (int) (FOR_MAX_RANDOM_MIN_MOVIMENTI + (Math.random() * FOR_MAX_RANDOM_MAX_MOVIMENTI));
+        for (int i = FOR_MIN_COUNTER_MOVIMENTI; i < numeroTitoli; i++) {
             Integer codicePgTitolo = inserimentoTitolo();
             inserisciNumeroCasualeMovimenti(codicePcPolizza, codicePgTitolo);
         }
     }
 
     private void inserisciNumeroCasualeMovimenti(Integer codicePcPolizza, Integer codicePgTitolo) {
-        int numeroMovimenti = (int) (20 + (Math.random() * 30));
-        for (int j = 0; j < numeroMovimenti; j++) {
+        int numeroMovimenti = (int) (FOR_MAX_RANDOM_MIN_TITOLI + (Math.random() * FOR_MAX_RANDOM_MAX_TITOLI));
+        for (int j = FOR_MIN_COUNTER_TITOLI; j < numeroMovimenti; j++) {
             inserimentoMovimentoVersione(codicePcPolizza, codicePgTitolo);
         }
     }

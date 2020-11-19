@@ -14,11 +14,18 @@ public class Constant {
   public static final String PROVINCIA = "VR";
   public static final String NOME = "Mario ";
   public static final String COGNOME = "Rossi ";
-  public static final int MAX_NUMERO_POSIZIONI = 10;
+  public static final int FOR_MIN_NUMERO_POSIZIONI = 2;
+  public static final int FOR_MAX_NUMERO_POSIZIONI = 10;
   public static final int MIN_RANDOM_PRICE = 1000;
   public static final int MAX_RANDOM_PRICE = 50000;
   public static final int MAX_RANDOM_CODICE_UT = 10000;
   public static final int MIN_RANDOM_CODICE_UT = 1;
+  public static final int FOR_MIN_COUNTER_MOVIMENTI = 1;
+  public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 20;
+  public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 30;
+  public static final int FOR_MIN_COUNTER_TITOLI = 1;
+  public static final int FOR_MAX_RANDOM_MIN_TITOLI = 20;
+  public static final int FOR_MAX_RANDOM_MAX_TITOLI = 30;
 
   public static final int getRandomNumber(int min, int max) {
     return (int) ((Math.random() * (max - min)) + min);

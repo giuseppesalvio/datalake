@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.fincons.datalake.service.Constant.*;
 
@@ -116,7 +114,7 @@ public class InserimentoVita {
 
 
     private void inserisciPosizioni(int codicePolizzaVita, Date dataDecorrenza) {
-        for (int j = 1; j < getRandomNumber(2, MAX_NUMERO_POSIZIONI); j++) {
+        for (int j = 1; j < getRandomNumber(FOR_MIN_NUMERO_POSIZIONI, FOR_MAX_NUMERO_POSIZIONI); j++) {
             Vttab024Entity posizione =
                     Vttab024Entity.builder()
                             .t024Codsoc(341)
