@@ -13,9 +13,6 @@ import static com.fincons.datalake.service.Constant.*;
 @Service
 public class InserimentoDanni {
     public static final String IMPRESA_SRL = "impresa srl ";
-    public static final String VR = "VR";
-    public static final String MARIO = "Mario ";
-    public static final String ROSSI = "Rossi ";
     private static final Integer IDRESIDENZA = 55;
     public static final String CODFISCALE = "RSSMRA";
     public static final int TIPO_PF_DANNI = 1;
@@ -75,7 +72,7 @@ public class InserimentoDanni {
     private void inserimentoMovimentoVersione(Integer codicePcPolizza, Integer codicePgTitolo) {
         Integer codicePcMovimento = getMaxIdDiTabella(pcmovimentoRepository);
         pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
-        pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
+        pcversioneRepository.save(getPcVersione(codicePcPolizza));
     }
 
     private Integer inserimentoTitolo() {
@@ -113,7 +110,7 @@ public class InserimentoDanni {
         return codicePasoggettolock;
     }
 
-    private PcversioneEntity getPcVersione(Integer codicePcPolizza, Integer codicePcMovimento) {
+    private PcversioneEntity getPcVersione(Integer codicePcPolizza) {
         return PcversioneEntity.builder()
                 .idpolizza(codicePcPolizza)
                 .nverinizio(getRandom(0, 999999998))
@@ -207,8 +204,8 @@ public class InserimentoDanni {
     private static PadatisingoliEntity getPadatisingoliF(Integer idcontraente, Integer ecidContraente) {
         return PadatisingoliEntity.builder()
                 .iddatisingoli(idcontraente)
-                .ccognome(ROSSI + ecidContraente)
-                .cnome(MARIO + ecidContraente)
+                .ccognome(NOME + ecidContraente)
+                .cnome(COGNOME + ecidContraente)
                 .necid(ecidContraente)
                 .build();
     }
