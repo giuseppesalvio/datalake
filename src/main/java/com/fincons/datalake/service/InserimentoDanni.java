@@ -10,14 +10,9 @@ import java.sql.Date;
 
 import static com.fincons.datalake.service.Constant.*;
 
+
 @Service
 public class InserimentoDanni {
-    public static final String IMPRESA_SRL = "impresa srl ";
-    private static final Integer IDRESIDENZA = 55;
-    public static final String CODFISCALE = "RSSMRA";
-    public static final int TIPO_PF_DANNI = 1;
-    public static final int TIPO_PG_DANNI = 2;
-
     @Autowired
     PadatisingoliRepository paDatiSingoliRepository;
     @Autowired
@@ -72,7 +67,7 @@ public class InserimentoDanni {
     private void inserimentoMovimentoVersione(Integer codicePcPolizza, Integer codicePgTitolo) {
         Integer codicePcMovimento = getMaxIdDiTabella(pcmovimentoRepository);
         pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
-        pcversioneRepository.save(getPcVersione(codicePcPolizza));
+        pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
     }
 
     private Integer inserimentoTitolo() {
@@ -110,7 +105,7 @@ public class InserimentoDanni {
         return codicePasoggettolock;
     }
 
-    private PcversioneEntity getPcVersione(Integer codicePcPolizza) {
+    private PcversioneEntity getPcVersione(Integer codicePcPolizza, Integer codicePcMovimento) {
         return PcversioneEntity.builder()
                 .idpolizza(codicePcPolizza)
                 .nverinizio(getRandom(0, 999999998))
@@ -126,8 +121,8 @@ public class InserimentoDanni {
                 .nversione(1)
                 .btemporaneo(BigInteger.ZERO)
                 .cdescrizione("movimento")
-                .deffetto(Date.valueOf("2020-06-30"))
-                .demissione(Date.valueOf("2020-06-30"))
+                .deffetto(DEFFETTO)
+                .demissione(DEMISSIONE)
                 .idpolizza(codicePcPolizza)
                 .idgruppotitoli(codicePgTitolo)
                 .idcausale(0)
@@ -186,7 +181,7 @@ public class InserimentoDanni {
 
     private PasoggettoEntity getPaSoggetto(Integer codicePaSoggetto, Integer codicePaDatiSingoli, Integer tipo) {
         return PasoggettoEntity.builder()
-                .ccodicefiscale(CODFISCALE + codicePaSoggetto)
+                .ccodicefiscale(CF + codicePaSoggetto)
                 .iddatisingoli(codicePaDatiSingoli)
                 .idsoggetto(codicePaSoggetto)
                 .etiposoggetto(tipo)
@@ -204,8 +199,8 @@ public class InserimentoDanni {
     private static PadatisingoliEntity getPadatisingoliF(Integer idcontraente, Integer ecidContraente) {
         return PadatisingoliEntity.builder()
                 .iddatisingoli(idcontraente)
-                .ccognome(NOME + ecidContraente)
-                .cnome(COGNOME + ecidContraente)
+                .ccognome(COGNOME + ecidContraente)
+                .cnome(NOME + ecidContraente)
                 .necid(ecidContraente)
                 .build();
     }

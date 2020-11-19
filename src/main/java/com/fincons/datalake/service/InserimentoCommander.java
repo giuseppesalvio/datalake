@@ -22,7 +22,7 @@ public class InserimentoCommander {
     Integer comComPostalAddressesId = getCodice(comComPostalAddressesRepository);
 
     comComNaturalPersonRepository.save(getPersonaFisica(ecid));
-    comComMasterDataRepository.save(getMasterData(ecid)); // non serve
+    comComMasterDataRepository.save(getMasterData(ecid));
     comComIdentificationDataRepository.save(getIdentificationDataFisica(ecid));
 
     comMetaTerritoryRepository.save(getMetaTerritory(metaTerritoryId, ecid));
@@ -58,10 +58,10 @@ public class InserimentoCommander {
   private ComMetaTerritoryEntity getMetaTerritory(Integer metaTerritoryId, int ecid) {
     return ComMetaTerritoryEntity.builder()
         .id(metaTerritoryId)
-        .additionalcode1("additionalcode1 " + ecid)
-        .additionalcode2("additionalcode2 " + ecid)
-        .additionalcode3("additionalcode3 " + ecid)
-        .additionalcode4("additionalcode4 " + ecid)
+        .adminarea1(NAZIONE)
+        .adminarea2(CITTA)
+        .adminarea3(CITTA)
+        .adminarea4(VIA + ecid)
         .build();
   }
 
@@ -116,8 +116,8 @@ public class InserimentoCommander {
     return ComComNaturalpersonEntity.builder()
         .id(ecid)
         .ecid(ecid)
-        .name("Mario " + ecid)
-        .surname("Rossi " + ecid)
+        .name(NOME+ ecid)
+        .surname(COGNOME + ecid)
         .build();
   }
 }
