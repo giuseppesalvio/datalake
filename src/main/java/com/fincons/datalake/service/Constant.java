@@ -40,6 +40,10 @@ public class Constant {
   public static final int FOR_MIN_COUNTER_TITOLI = 1;
   public static final int FOR_MAX_RANDOM_MIN_TITOLI = 5; // 20
   public static final int FOR_MAX_RANDOM_MAX_TITOLI = 5; // 30
+  public static final int FOR_MIN_COUNTER_POLIZZE = 1;
+  public static final int FOR_MIN_RANDOM_POLIZZE = 5; // 20
+  public static final int FOR_MAX_RANDOM_POLIZZE = 5; // 30
+
 
   public static final int getRandomNumber(int min, int max) {
     return (int) ((Math.random() * (max - min)) + min);
