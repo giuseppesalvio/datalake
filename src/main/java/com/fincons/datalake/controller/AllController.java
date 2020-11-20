@@ -22,7 +22,6 @@ public class AllController {
     @GetMapping("/riempiDb")
     public void riempiDb(){
         // FISICA
-
         for (int i = START_FOR_PF; i < END_FOR_PF; i++) {
             Integer ecidContraente = inserimentoCommander.pf();
             inserimentoVita.pf(ecidContraente);
