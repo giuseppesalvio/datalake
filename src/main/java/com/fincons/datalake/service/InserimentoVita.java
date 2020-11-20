@@ -28,11 +28,9 @@ public class InserimentoVita {
   @Autowired private InserimentoCommander inserimentoCommander;
 
   public Integer pg(Integer ecidContraente) {
-    int randomMax =
-        getRandomNumber(
-            FOR_MIN_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA, FOR_MAX_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA);
+    int randomMax = getRandomNumber(FOR_MAX_RANDOM_MIN_POLIZZA, FOR_MAX_RANDOM_MAX_POLIZZA);
 
-    for (int i = FOR_MIN_COUNTER_NUMERO_CONTRAENTI_X_POLIZZA; i < randomMax; i++) {
+    for (int i = 1; i < randomMax; i++) {
       int codiceContraenteVita = getCodiceClienteVita();
       int codicePolizzaVita = getCodicePolizzaVita();
       Date dataDecorrenza = getRandomDate();
@@ -58,11 +56,9 @@ public class InserimentoVita {
   }
 
   public void pf(Integer ecidContraente) {
-    int randomMax =
-        getRandomNumber(
-            FOR_MIN_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA, FOR_MAX_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA);
+    int randomMax = getRandomNumber(FOR_MAX_RANDOM_MIN_POLIZZA, FOR_MAX_RANDOM_MAX_POLIZZA);
 
-    for (int i = FOR_MIN_COUNTER_NUMERO_CONTRAENTI_X_POLIZZA; i < randomMax; i++) {
+    for (int i = 1; i < randomMax; i++) {
       int codiceContraenteVita = getCodiceClienteVita();
       int codicePolizzaVita = getCodicePolizzaVita();
       Date dataDecorrenza = getRandomDate();
@@ -84,17 +80,17 @@ public class InserimentoVita {
         getPolizzaPersonaFisica(
             ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
   }
-//
-//  private void inserisciAltreFigure(int codiceContraenteVita) {
-//    inserisciAltro(codiceContraenteVita + 1);
-//    inserisciAltro(codiceContraenteVita + 2);
-//    inserisciAltro(codiceContraenteVita + 3);
-//    inserisciAltro(codiceContraenteVita + 4);
-//    inserisciAltro(codiceContraenteVita + 5);
-//    inserisciAltro(codiceContraenteVita + 6);
-//    inserisciAltro(codiceContraenteVita + 7);
-//    inserisciAltro(codiceContraenteVita + 8);
-//  }
+  //
+  //  private void inserisciAltreFigure(int codiceContraenteVita) {
+  //    inserisciAltro(codiceContraenteVita + 1);
+  //    inserisciAltro(codiceContraenteVita + 2);
+  //    inserisciAltro(codiceContraenteVita + 3);
+  //    inserisciAltro(codiceContraenteVita + 4);
+  //    inserisciAltro(codiceContraenteVita + 5);
+  //    inserisciAltro(codiceContraenteVita + 6);
+  //    inserisciAltro(codiceContraenteVita + 7);
+  //    inserisciAltro(codiceContraenteVita + 8);
+  //  }
 
   private int getCodiceClienteVita() {
     Integer temp = personaVitaRepository.findMaxNumCliente();
@@ -122,15 +118,15 @@ public class InserimentoVita {
     personaVitaEstesaRepository.save(getPersonaGiuridicaEstesa(ecidContraente, codiceClienteVita));
   }
 
-//  private void inserisciAltro(int codiceClienteVita) {
-//    int ecid = inserimentoCommander.pf();
-//    personaVitaRepository.save(getPersonaFisica(ecid, codiceClienteVita));
-//    personaVitaEstesaRepository.save(getPersonaFisicaEstesa(ecid, codiceClienteVita));
-//  }
+  //  private void inserisciAltro(int codiceClienteVita) {
+  //    int ecid = inserimentoCommander.pf();
+  //    personaVitaRepository.save(getPersonaFisica(ecid, codiceClienteVita));
+  //    personaVitaEstesaRepository.save(getPersonaFisicaEstesa(ecid, codiceClienteVita));
+  //  }
 
   private void inserisciPosizioni(int codicePolizzaVita, Date dataDecorrenza) {
-    for (int j = FOR_MIN_COUNTER_POSIZIONI;
-        j < getRandomNumber(FOR_MIN_RANDOM_POSIZIONI, FOR_MAX_RANDOM_POSIZIONI);
+    for (int j = 1;
+        j < getRandomNumber(FOR_MAX_RANDOM_MIN_POSIZIONI, FOR_MAX_RANDOM_MAX_POSIZIONI);
         j++) {
       Vttab024Entity posizione =
           Vttab024Entity.builder()

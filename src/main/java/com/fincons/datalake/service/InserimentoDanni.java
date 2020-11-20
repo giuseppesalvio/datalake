@@ -50,7 +50,7 @@ public class InserimentoDanni {
 
     private void inserisciNumeroCasualeTitoliMovimenti(Integer codicePcPolizza) {
         int numeroTitoli = (int) (FOR_MAX_RANDOM_MIN_MOVIMENTI + (Math.random() * FOR_MAX_RANDOM_MAX_MOVIMENTI));
-        for (int i = FOR_MIN_COUNTER_MOVIMENTI; i < numeroTitoli; i++) {
+        for (int i = 1; i < numeroTitoli; i++) {
             Integer codicePgTitolo = inserimentoTitolo();
             inserisciNumeroCasualeMovimenti(codicePcPolizza, codicePgTitolo);
         }
@@ -58,14 +58,14 @@ public class InserimentoDanni {
 
     private void inserisciNumeroCasualeMovimenti(Integer codicePcPolizza, Integer codicePgTitolo) {
         int numeroMovimenti = (int) (FOR_MAX_RANDOM_MIN_TITOLI + (Math.random() * FOR_MAX_RANDOM_MAX_TITOLI));
-        for (int j = FOR_MIN_COUNTER_TITOLI; j < numeroMovimenti; j++) {
+        for (int j = 1; j < numeroMovimenti; j++) {
             inserimentoMovimentoVersione(codicePcPolizza, codicePgTitolo);
         }
     }
 
     private void inserimentoMovimentoVersione(Integer codicePcPolizza, Integer codicePgTitolo) {
         Integer codicePcMovimento = getMaxIdDiTabella(pcmovimentoRepository);
-        pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandom(0, 1)));
+        pcmovimentoRepository.save(getPcMovimento(codicePcPolizza, codicePcMovimento, codicePgTitolo, /*bannullato*/getRandomNumber(0, 1)));
         pcversioneRepository.save(getPcVersione(codicePcPolizza, codicePcMovimento));
     }
 
@@ -77,7 +77,7 @@ public class InserimentoDanni {
 
     private void inserimentoPolizzaRuoloTitoliMovimenti(Integer codicePasoggettolock) {
         int numeroPolizze = getRandomNumber(FOR_MIN_RANDOM_POLIZZE, FOR_MAX_RANDOM_POLIZZE);
-        for (int i = FOR_MIN_COUNTER_POLIZZE; i < numeroPolizze; i++) {
+        for (int i = 1; i < numeroPolizze; i++) {
             Integer codicePcRuolo = getMaxIdDiTabella(pcRuoloRepository);
             Integer codicePcPolizza = getMaxIdDiTabella(pcPolizzaRepository);
             pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
@@ -111,7 +111,7 @@ public class InserimentoDanni {
     private PcversioneEntity getPcVersione(Integer codicePcPolizza, Integer codicePcMovimento) {
         return PcversioneEntity.builder()
                 .idpolizza(codicePcPolizza)
-                .nverinizio(getRandom(0, 999999998))
+                .nverinizio(getRandomNumber(0, 999999998))
                 .nverfine(999999999) //BigDecimal.getValue()
                 .idpvgestione(0)
                 .etipocoass(0)
@@ -136,8 +136,8 @@ public class InserimentoDanni {
     private PgtitoloEntity getPgTitolo(Integer codicePgTitolo) {
         return PgtitoloEntity.builder()
                 .idtitolo(codicePgTitolo)
-                .nimporto(BigDecimal.valueOf(getRandom(1, 1000000)))
-                .nimportototale(BigDecimal.valueOf(getRandom(1, 1000000)))
+                .nimporto(BigDecimal.valueOf(getRandomNumber(1, 1000000)))
+                .nimportototale(BigDecimal.valueOf(getRandomNumber(1, 1000000)))
                 .build();
     }
 
@@ -216,9 +216,5 @@ public class InserimentoDanni {
                 .cdenominazione(IMPRESA_SRL + ecidContraente)
                 .necid(ecidContraente)
                 .build();
-    }
-
-    private Integer getRandom(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
     }
 }

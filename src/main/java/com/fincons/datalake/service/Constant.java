@@ -26,23 +26,18 @@ public class Constant {
   public static final int TIPO_PF_DANNI = 1;
   public static final int TIPO_PG_DANNI = 2;
 
-  public static final int FOR_MIN_COUNTER_NUMERO_CONTRAENTI_X_POLIZZA = 1;
-  public static final int FOR_MIN_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA = 5;
-  public static final int FOR_MAX_RANDOM_NUMERO_CONTRAENTI_X_POLIZZA = 5;
+  public static final int FOR_MAX_RANDOM_MIN_POLIZZA = 2;
+  public static final int FOR_MAX_RANDOM_MAX_POLIZZA = 10;
 
-  public static final int FOR_MIN_COUNTER_POSIZIONI = 1;
-  public static final int FOR_MIN_RANDOM_POSIZIONI = 5; // 20
-  public static final int FOR_MAX_RANDOM_POSIZIONI = 5; // 30
+  public static final int FOR_MAX_RANDOM_MIN_POSIZIONI = 10; // 20
+  public static final int FOR_MAX_RANDOM_MAX_POSIZIONI = 30; // 30
 
-  public static final int FOR_MIN_COUNTER_MOVIMENTI = 1;
   public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 2; // 20
   public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 2; // 30
-  public static final int FOR_MIN_COUNTER_TITOLI = 1;
-  public static final int FOR_MAX_RANDOM_MIN_TITOLI = 5; // 20
-  public static final int FOR_MAX_RANDOM_MAX_TITOLI = 5; // 30
-  public static final int FOR_MIN_COUNTER_POLIZZE = 1;
-  public static final int FOR_MIN_RANDOM_POLIZZE = 5; // 20
-  public static final int FOR_MAX_RANDOM_POLIZZE = 5; // 30
+  public static final int FOR_MAX_RANDOM_MIN_TITOLI = 10; // 20
+  public static final int FOR_MAX_RANDOM_MAX_TITOLI = 30; // 30
+  public static final int FOR_MIN_RANDOM_POLIZZE = 10; // 20
+  public static final int FOR_MAX_RANDOM_POLIZZE = 30; // 30
 
 
   public static final int getRandomNumber(int min, int max) {
