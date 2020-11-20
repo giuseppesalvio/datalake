@@ -35,14 +35,15 @@ public class Constant {
   public static final int FOR_MAX_RANDOM_POSIZIONI = 5; // 30
 
   public static final int FOR_MIN_COUNTER_MOVIMENTI = 1;
-  public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 5; // 20
-  public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 5; // 30
+  public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 2; // 20
+  public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 2; // 30
   public static final int FOR_MIN_COUNTER_TITOLI = 1;
   public static final int FOR_MAX_RANDOM_MIN_TITOLI = 5; // 20
   public static final int FOR_MAX_RANDOM_MAX_TITOLI = 5; // 30
 
   public static final int getRandomNumber(int min, int max) {
-    return (int) ((Math.random() * (max - min)) + min);
+    double temp = ((Math.random() * (max - min)) + min);
+    return (int) Math.round(temp);
   }
 
   public static final Date getRandomDate() {
