@@ -38,14 +38,12 @@ public class InserimentoDanni {
 
     public void pf(Integer ecidContraente) {
         Integer codicePasoggettolock = inserimentoDatiAnagraficiFisica(ecidContraente);
-        Integer codicePcPolizza = inserimentoPolizzaE_Ruolo(codicePasoggettolock);
-        inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
+        inserimentoPolizzaRuoloTitoliMovimenti(codicePasoggettolock);
     }
 
     public void pg(Integer ecidContraente) {
         Integer codicePasoggettolock = inserimentoDatiAnagraficiGiuridica(ecidContraente);
-        Integer codicePcPolizza = inserimentoPolizzaE_Ruolo(codicePasoggettolock);
-        inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
+        inserimentoPolizzaRuoloTitoliMovimenti(codicePasoggettolock);
     }
 
 
@@ -77,13 +75,17 @@ public class InserimentoDanni {
         return codicePgTitolo;
     }
 
-    private Integer inserimentoPolizzaE_Ruolo(Integer codicePasoggettolock) {
-        Integer codicePcRuolo = getMaxIdDiTabella(pcRuoloRepository);
-        Integer codicePcPolizza = getMaxIdDiTabella(pcPolizzaRepository);
-        pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
-        pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
-        pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
-        return codicePcPolizza;
+    private void inserimentoPolizzaRuoloTitoliMovimenti(Integer codicePasoggettolock) {
+        int numeroPolizze = getRandomNumber(FOR_MIN_RANDOM_POLIZZE, FOR_MAX_RANDOM_POLIZZE);
+        for (int i = FOR_MIN_COUNTER_POLIZZE; i < numeroPolizze; i++) {
+            Integer codicePcRuolo = getMaxIdDiTabella(pcRuoloRepository);
+            Integer codicePcPolizza = getMaxIdDiTabella(pcPolizzaRepository);
+            pcRuoloRepository.save(getPcRuolo(codicePcRuolo, codicePasoggettolock));
+            pcPolizzaRepository.save(getPcPolizza(codicePcPolizza));
+            pcpolizzaruoloRepository.save(getPcPolizzaRuolo(codicePcPolizza, codicePcRuolo));
+            inserisciNumeroCasualeTitoliMovimenti(codicePcPolizza);
+        }
+
     }
 
     private Integer inserimentoDatiAnagraficiGiuridica(Integer ecidContraente) {
