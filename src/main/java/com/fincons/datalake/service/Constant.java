@@ -29,15 +29,15 @@ public class Constant {
   public static final int FOR_MAX_RANDOM_MIN_POLIZZA = 2;
   public static final int FOR_MAX_RANDOM_MAX_POLIZZA = 10;
 
-  public static final int FOR_MAX_RANDOM_MIN_POSIZIONI = 10; // 20
-  public static final int FOR_MAX_RANDOM_MAX_POSIZIONI = 30; // 30
+  public static final int FOR_MAX_RANDOM_MIN_POSIZIONI = 3; // 20
+  public static final int FOR_MAX_RANDOM_MAX_POSIZIONI = 5; // 30
 
   public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 2; // 20
   public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 2; // 30
-  public static final int FOR_MAX_RANDOM_MIN_TITOLI = 10; // 20
-  public static final int FOR_MAX_RANDOM_MAX_TITOLI = 30; // 30
-  public static final int FOR_MIN_RANDOM_POLIZZE = 10; // 20
-  public static final int FOR_MAX_RANDOM_POLIZZE = 30; // 30
+  public static final int FOR_MAX_RANDOM_MIN_TITOLI = 2; // 20
+  public static final int FOR_MAX_RANDOM_MAX_TITOLI = 5; // 30
+  public static final int FOR_MIN_RANDOM_POLIZZE = 2; // 20
+  public static final int FOR_MAX_RANDOM_POLIZZE = 5; // 30
 
 
   public static final int getRandomNumber(int min, int max) {

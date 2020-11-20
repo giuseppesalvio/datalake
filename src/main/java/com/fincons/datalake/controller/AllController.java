@@ -12,30 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class AllController {
 
-    public static final int START_FOR_PF = 1;
-    public static final int END_FOR_PF = 4;
-    public static final int START_FOR_PG = 11;
-    public static final int END_FOR_PG = 21;
     private InserimentoVita inserimentoVita;
     private InserimentoDanni inserimentoDanni;
     private InserimentoCommander inserimentoCommander;
 
     @GetMapping("/riempiDb")
-    public void riempiDb(@RequestParam int start, @RequestParam int end){
-        // FISICA
-        for (int i = start; i < end; i++) {
-            Integer ecidContraente = inserimentoCommander.pf();
-            inserimentoVita.pf(ecidContraente);
-            inserimentoDanni.pf(ecidContraente);
+    public void riempiDb(@RequestParam int end){
+        for (int i = 1; i < end; i++) {
+            System.out.println("[Start] - Inserimento "+i);
+            inserisciAnagraficaFisica();
+            System.out.println("[End-Ins-PF] - Inserimento PF "+i);
+            inserisciAnagraficaGiuridica();
+            System.out.println("[End] - Inserimento "+i);
         }
+    }
 
-        // GIURIDICA
-        int startG = end + 1;
-        int endG = end + end;
-        for (int i = startG; i < endG; i++) {
-            Integer ecidContraente = inserimentoCommander.pg();
-            inserimentoVita.pg(ecidContraente);
-            inserimentoDanni.pg(ecidContraente);
-        }
+    private void inserisciAnagraficaGiuridica() {
+        Integer ecidContraente = inserimentoCommander.pg();
+        inserimentoVita.pg(ecidContraente);
+        inserimentoDanni.pg(ecidContraente);
+    }
+
+    private void inserisciAnagraficaFisica() {
+        Integer ecidContraente = inserimentoCommander.pf();
+        inserimentoVita.pf(ecidContraente);
+        inserimentoDanni.pf(ecidContraente);
     }
 }
