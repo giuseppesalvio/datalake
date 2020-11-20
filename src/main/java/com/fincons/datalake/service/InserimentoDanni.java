@@ -5,6 +5,7 @@ import com.fincons.datalake.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 
@@ -133,6 +134,8 @@ public class InserimentoDanni {
     private PgtitoloEntity getPgTitolo(Integer codicePgTitolo) {
         return PgtitoloEntity.builder()
                 .idtitolo(codicePgTitolo)
+                .nimporto(BigDecimal.valueOf(getRandom(1, 1000000)))
+                .nimportototale(BigDecimal.valueOf(getRandom(1, 1000000)))
                 .build();
     }
 
