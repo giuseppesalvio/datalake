@@ -44,5 +44,4 @@ public class NomeRepositoryTest {
 
         Assertions.assertThat(result.getNome()).isEqualTo("mario");
     }
-
 }

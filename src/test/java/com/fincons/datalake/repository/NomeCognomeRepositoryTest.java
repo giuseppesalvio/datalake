@@ -91,17 +91,16 @@ public class NomeCognomeRepositoryTest {
 
     @Test
     public void aggiornaFlagUsato() {
-        jdbcTemplate.update("TRUNCATE TABLE NOMECOGNOME");
         List<NomeCognome> dbStatoIniziale = Arrays.asList(
                 NomeCognome.builder().nome("mario").cognome("rossi").usato(true).build(),
                 NomeCognome.builder().nome("giacomo").cognome("verdi").usato(true).build());
+        jdbcTemplate.update("TRUNCATE TABLE NOMECOGNOME");
         jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME, USATO) VALUES (?, ?, ?)",
                 dbStatoIniziale.get(0).getNome(), dbStatoIniziale.get(0).getCognome(), dbStatoIniziale.get(0).getUsato());
         jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME) VALUES (?, ?)",
                 dbStatoIniziale.get(1).getNome(), dbStatoIniziale.get(1).getCognome());
 
         nomeCognomeRepository.aggiornaFlagUsato(2);
-
         Boolean result = jdbcTemplate.queryForObject("SELECT USATO FROM NOMECOGNOME WHERE ID = " + 2,
                 Boolean.class);
 
@@ -109,15 +108,14 @@ public class NomeCognomeRepositoryTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testCasoEccezioneNullPointerTabellaVuota(){
+    public void testCasoEccezioneNullPointerTabellaVuota() {
         jdbcTemplate.update("DELETE FROM NOMECOGNOME");
 
         nomeCognomeRepository.primoNomeCognomeNonUtilizzato();
-
     }
-    @Test(expected = NullPointerException.class)
-    public void testCasoEccezioneNullPointerNomiCognomiTuttiUtilizzati(){
 
+    @Test(expected = NullPointerException.class)
+    public void testCasoEccezioneNullPointerNomiCognomiTuttiUtilizzati() {
         jdbcTemplate.update("DELETE FROM NOMECOGNOME");
         jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME,USATO) VALUES ('mario', 'rossi', TRUE)");
         jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME,USATO) VALUES ('giacomo', 'verdi', TRUE)");

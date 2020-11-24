@@ -2,13 +2,9 @@ package com.fincons.datalake.controller;
 
 
 import com.fincons.datalake.DatalakeApplication;
-import com.fincons.datalake.entity.Nome;
 import com.fincons.datalake.entity.NomeCognome;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.util.NestedServletException;
 
-import java.sql.JDBCType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,49 +32,27 @@ public class AllControllerE2ETest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public void riempiDB() {
-
-        jdbcTemplate.update("DELETE FROM NOMI");
-        jdbcTemplate.update("DELETE FROM COGNOMI");
-        jdbcTemplate.update("INSERT INTO NOMI VALUES ('mario')");
-        jdbcTemplate.update("INSERT INTO NOMI VALUES ('giacomo')");
-        jdbcTemplate.update("INSERT INTO NOMI VALUES ('roberto')");
-        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('rossi')");
-        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('verdi')");
-        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('gialli')");
-    }
-
     @Test
     public void riempiTabellaNomeCognome() throws Exception {
-        riempiDB();
-        jdbcTemplate.update("TRUNCATE TABLE NOMECOGNOME");
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME)" +
-                " VALUES('mario', 'rossi')");
+        riempiSingoleTabelleNomiCognomi();
+        truncateTabellaNomeCognome();
+        List<NomeCognome> dbStatoIniziale = getListaNomiCognomi(false);
+        riempiTabellaNomeCognomeDaLista(dbStatoIniziale);
+
         MvcResult mvcResult = mvc.perform(
                 get("/riempiTabellaNomeCognome"))
                 .andReturn();
 
-        Integer result = (Integer) jdbcTemplate.queryForObject("SELECT COUNT(*) FROM NOMECOGNOME",
+        Integer righePresentiADBStatoFinale = (Integer) jdbcTemplate.queryForObject("SELECT COUNT(*) FROM NOMECOGNOME",
                 Integer.class);
-
-        Assertions.assertThat(result).isEqualTo(9);
-
+        Assertions.assertThat(righePresentiADBStatoFinale).isEqualTo(9);
     }
 
     @Test
     public void generaNomeCognome() throws Exception {
-        jdbcTemplate.update("DELETE FROM NOMECOGNOME");
-        List<NomeCognome> dbStatoIniziale = Arrays.asList(
-                NomeCognome.builder().nome("mario").cognome("rossi").usato(true).id(1).build(),
-                NomeCognome.builder().nome("giacomo").cognome("verdi").usato(false).id(2).build(),
-                NomeCognome.builder().nome("luigi").cognome("gialli").usato(false).id(3).build());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(0).getId(), dbStatoIniziale.get(0).getNome(), dbStatoIniziale.get(0).getCognome(), dbStatoIniziale.get(0).getUsato());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(1).getId(), dbStatoIniziale.get(1).getNome(), dbStatoIniziale.get(1).getCognome(), dbStatoIniziale.get(1).getUsato());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(2).getId(), dbStatoIniziale.get(2).getNome(), dbStatoIniziale.get(2).getCognome(), dbStatoIniziale.get(2).getUsato());
-
+        truncateTabellaNomeCognome();
+        List<NomeCognome> dbStatoIniziale = getListaNomiCognomi(false);
+        riempiTabellaNomeCognomeDaLista(dbStatoIniziale);
 
         MvcResult mvcResult = mvc.perform(
                 get("/generaNomeCognome"))
@@ -99,17 +72,9 @@ public class AllControllerE2ETest {
 
     @Test
     public void generaNomeCognomeTabellaEsaurita() throws Exception {
-        jdbcTemplate.update("DELETE FROM NOMECOGNOME");
-        List<NomeCognome> dbStatoIniziale = Arrays.asList(
-                NomeCognome.builder().nome("mario").cognome("rossi").usato(true).id(1).build(),
-                NomeCognome.builder().nome("giacomo").cognome("verdi").usato(true).id(2).build(),
-                NomeCognome.builder().nome("luigi").cognome("gialli").usato(true).id(3).build());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(0).getId(), dbStatoIniziale.get(0).getNome(), dbStatoIniziale.get(0).getCognome(), dbStatoIniziale.get(0).getUsato());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(1).getId(), dbStatoIniziale.get(1).getNome(), dbStatoIniziale.get(1).getCognome(), dbStatoIniziale.get(1).getUsato());
-        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
-                dbStatoIniziale.get(2).getId(), dbStatoIniziale.get(2).getNome(), dbStatoIniziale.get(2).getCognome(), dbStatoIniziale.get(2).getUsato());
+        List<NomeCognome> dbStatoIniziale = getListaNomiCognomi(true);
+        truncateTabellaNomeCognome();
+        riempiTabellaNomeCognomeDaLista(dbStatoIniziale);
 
         try {
             MvcResult mvcResult = mvc.perform(
@@ -118,6 +83,37 @@ public class AllControllerE2ETest {
         } catch (NestedServletException e) {
             return;
         }
+    }
 
+    private List<NomeCognome> getListaNomiCognomi(boolean presentiSoloStatiUsati) {
+        return Arrays.asList(
+                NomeCognome.builder().nome("mario").cognome("rossi").usato(true).id(1).build(),
+                NomeCognome.builder().nome("giacomo").cognome("verdi").usato(presentiSoloStatiUsati).id(2).build(),
+                NomeCognome.builder().nome("luigi").cognome("gialli").usato(presentiSoloStatiUsati).id(3).build());
+    }
+
+    private void riempiTabellaNomeCognomeDaLista(List<NomeCognome> dbStatoIniziale) {
+        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
+                dbStatoIniziale.get(0).getId(), dbStatoIniziale.get(0).getNome(), dbStatoIniziale.get(0).getCognome(), dbStatoIniziale.get(0).getUsato());
+        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
+                dbStatoIniziale.get(1).getId(), dbStatoIniziale.get(1).getNome(), dbStatoIniziale.get(1).getCognome(), dbStatoIniziale.get(1).getUsato());
+        jdbcTemplate.update("INSERT INTO NOMECOGNOME (ID, NOME, COGNOME, USATO) VALUES (?, ?, ?, ?)",
+                dbStatoIniziale.get(2).getId(), dbStatoIniziale.get(2).getNome(), dbStatoIniziale.get(2).getCognome(), dbStatoIniziale.get(2).getUsato());
+    }
+
+    private void truncateTabellaNomeCognome() {
+        jdbcTemplate.update("DELETE FROM NOMECOGNOME");
+    }
+
+    public void riempiSingoleTabelleNomiCognomi() {
+
+        jdbcTemplate.update("DELETE FROM NOMI");
+        jdbcTemplate.update("DELETE FROM COGNOMI");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('mario')");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('giacomo')");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('roberto')");
+        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('rossi')");
+        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('verdi')");
+        jdbcTemplate.update("INSERT INTO COGNOMI VALUES ('gialli')");
     }
 }

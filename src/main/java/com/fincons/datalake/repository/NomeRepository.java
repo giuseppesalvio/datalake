@@ -21,7 +21,6 @@ public class NomeRepository {
                 "SELECT * FROM NOMI",
                 Nome.class
         );
-
     }
 
     public Nome getByNome(String nome) {

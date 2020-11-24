@@ -14,20 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class NomeCognomeRepository {
+
     private JdbcTemplate jdbcTemplate;
 
-    public void svuota() {
-        jdbcTemplate.update("TRUNCATE TABLE NOMECOGNOME");
-    }
-
-
     public void inserisci(List<Nome> listaNomi, List<Cognome> listaCognomi) {
-        for (Nome nome:
-             listaNomi) {
-            for (Cognome cognome:
-                 listaCognomi) {
+        for (Nome nome : listaNomi) {
+            for (Cognome cognome : listaCognomi) {
                 jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME) VALUES (?, ?)",
-                nome.getNome(), cognome.getCognome()
+                        nome.getNome(),
+                        cognome.getCognome()
                 );
             }
         }
@@ -45,6 +40,10 @@ public class NomeCognomeRepository {
     }
 
     public void aggiornaFlagUsato(Integer idUsato) {
-       jdbcTemplate.update("UPDATE NOMECOGNOME SET USATO = true WHERE ID = " + idUsato);
+        jdbcTemplate.update("UPDATE NOMECOGNOME SET USATO = true WHERE ID = " + idUsato);
+    }
+
+    public void svuota() {
+        jdbcTemplate.update("TRUNCATE TABLE NOMECOGNOME");
     }
 }
