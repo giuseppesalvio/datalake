@@ -2,26 +2,33 @@ package com.fincons.datalake.repository;
 
 import com.fincons.datalake.DatalakeApplication;
 import com.fincons.datalake.entity.Nome;
-import com.fincons.datalake.entity.NomeCognome;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DatalakeApplication.class)
 public class NomeRepositoryTest {
 
     @Autowired
-    NomeRepository nomeRepository;
+    private NomeRepository nomeRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void riempiDB() {
+        jdbcTemplate.update("DELETE FROM NOMI");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('mario')");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('giacomo')");
+        jdbcTemplate.update("INSERT INTO NOMI VALUES ('roberto')");
+    }
 
     @Test
     public void selectAll() {
@@ -29,6 +36,7 @@ public class NomeRepositoryTest {
 
         Assertions.assertThat(result.size()).isEqualTo(3);
     }
+
     @Test
     public void selectByNome() {
         String nomeInput = "mario";

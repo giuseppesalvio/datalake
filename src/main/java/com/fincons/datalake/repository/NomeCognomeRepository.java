@@ -4,6 +4,7 @@ import com.fincons.datalake.entity.Cognome;
 import com.fincons.datalake.entity.Nome;
 import com.fincons.datalake.entity.NomeCognome;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,8 +34,13 @@ public class NomeCognomeRepository {
     }
 
     public NomeCognome primoNomeCognomeNonUtilizzato() {
-        NomeCognome result = (NomeCognome) jdbcTemplate.queryForObject("SELECT * FROM NOMECOGNOME WHERE USATO = FALSE fetch first 1 rows only",
-                new BeanPropertyRowMapper(NomeCognome.class));
+        NomeCognome result;
+        try {
+            result = (NomeCognome) jdbcTemplate.queryForObject("SELECT * FROM NOMECOGNOME WHERE USATO = FALSE fetch first 1 rows only",
+                    new BeanPropertyRowMapper(NomeCognome.class));
+        } catch (EmptyResultDataAccessException e) {
+            throw new NullPointerException();
+        }
         return result;
     }
 

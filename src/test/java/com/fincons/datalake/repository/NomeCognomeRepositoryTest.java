@@ -107,4 +107,22 @@ public class NomeCognomeRepositoryTest {
 
         Assertions.assertThat(result).isEqualTo(true);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void testCasoEccezioneNullPointerTabellaVuota(){
+        jdbcTemplate.update("DELETE FROM NOMECOGNOME");
+
+        nomeCognomeRepository.primoNomeCognomeNonUtilizzato();
+
+    }
+    @Test(expected = NullPointerException.class)
+    public void testCasoEccezioneNullPointerNomiCognomiTuttiUtilizzati(){
+
+        jdbcTemplate.update("DELETE FROM NOMECOGNOME");
+        jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME,USATO) VALUES ('mario', 'rossi', TRUE)");
+        jdbcTemplate.update("INSERT INTO NOMECOGNOME (NOME, COGNOME,USATO) VALUES ('giacomo', 'verdi', TRUE)");
+
+        nomeCognomeRepository.primoNomeCognomeNonUtilizzato();
+    }
+
 }
