@@ -1,5 +1,7 @@
 package com.fincons.datalake.controller;
 
+import com.fincons.datalake.entity.NomeCognome;
+import com.fincons.datalake.service.GeneratoreNomiCognomiService;
 import com.fincons.datalake.service.InserimentoCommander;
 import com.fincons.datalake.service.InserimentoDanni;
 import com.fincons.datalake.service.InserimentoVita;
@@ -15,6 +17,7 @@ public class AllController {
     private InserimentoVita inserimentoVita;
     private InserimentoDanni inserimentoDanni;
     private InserimentoCommander inserimentoCommander;
+    private GeneratoreNomiCognomiService generatoreNomiCognomiService;
 
     @GetMapping("/riempiDb")
     public void riempiDb(@RequestParam int end){
@@ -25,6 +28,16 @@ public class AllController {
             inserisciAnagraficaGiuridica();
             System.out.println("[End] - Inserimento "+i);
         }
+    }
+
+    @GetMapping("/riempiTabellaNomeCognome")
+    public void riempiTabellaNomeCognome() {
+        generatoreNomiCognomiService.svuotaRiempiTabellaNomeCognomeDB();
+    }
+
+    @GetMapping ("/generaNomeCognome")
+    public NomeCognome generaNomeCognome() {
+        return generatoreNomiCognomiService.recuperaNomeCognomeNonUtilizzato();
     }
 
     private void inserisciAnagraficaGiuridica() {
