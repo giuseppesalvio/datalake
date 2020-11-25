@@ -14,8 +14,8 @@ public class Constant {
   public static final int CAP = 37120;
   public static final String PROVINCIA = "VR";
   public static final Integer IDRESIDENZA = 55;
-  public static final String NOME = "Mario ";
-  public static final String COGNOME = "Rossi ";
+  //public static final String NOME = "Mario ";
+  //public static final String COGNOME = "Rossi ";
   public static final Date DEFFETTO = Date.valueOf("2020-06-30");
   public static final Date DEMISSIONE = Date.valueOf("2020-06-30");
 
@@ -27,10 +27,10 @@ public class Constant {
   public static final int TIPO_PG_DANNI = 2;
 
   public static final int FOR_MAX_RANDOM_MIN_POLIZZA = 2;
-  public static final int FOR_MAX_RANDOM_MAX_POLIZZA = 10;
+  public static final int FOR_MAX_RANDOM_MAX_POLIZZA = 7;
 
   public static final int FOR_MAX_RANDOM_MIN_POSIZIONI = 3; // 20
-  public static final int FOR_MAX_RANDOM_MAX_POSIZIONI = 5; // 30
+  public static final int FOR_MAX_RANDOM_MAX_POSIZIONI = 7; // 30
 
   public static final int FOR_MAX_RANDOM_MIN_MOVIMENTI = 2; // 20
   public static final int FOR_MAX_RANDOM_MAX_MOVIMENTI = 2; // 30

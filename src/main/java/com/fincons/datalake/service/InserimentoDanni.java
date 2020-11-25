@@ -24,8 +24,8 @@ public class InserimentoDanni {
   @Autowired PgtitoloRepository pgtitoloRepository;
   @Autowired PcversioneRepository pcversioneRepository;
 
-  public void pf(Integer ecidContraente) {
-    Integer codicePasoggettolock = inserimentoDatiAnagraficiFisica(ecidContraente);
+  public void pf(Integer ecidContraente, NomiCognomiEntity nomeCognome) {
+    Integer codicePasoggettolock = inserimentoDatiAnagraficiFisica(ecidContraente,nomeCognome);
     inserimentoPolizzaRuoloTitoliMovimenti(codicePasoggettolock);
   }
 
@@ -97,11 +97,11 @@ public class InserimentoDanni {
     return codicePasoggettolock;
   }
 
-  private Integer inserimentoDatiAnagraficiFisica(Integer ecidContraente) {
+  private Integer inserimentoDatiAnagraficiFisica(Integer ecidContraente, NomiCognomiEntity nomeCognome) {
     Integer codicePaDatiSingoli = getMaxIdDiTabella(paDatiSingoliRepository);
     Integer codicePaSoggetto = getMaxIdDiTabella(paSoggettoRepository);
     Integer codicePasoggettolock = getMaxIdDiTabella(paSoggettoLockRepository);
-    paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente));
+    paDatiSingoliRepository.save(getPadatisingoliF(codicePaDatiSingoli, ecidContraente,nomeCognome));
     paSoggettoRepository.save(
         getPaSoggetto(
             codicePaSoggetto, codicePaDatiSingoli, TIPO_PF_DANNI)); // 1 per fisico 2 per giuridico
@@ -219,11 +219,11 @@ public class InserimentoDanni {
   }
 
   private static PadatisingoliEntity getPadatisingoliF(
-      Integer idcontraente, Integer ecidContraente) {
+          Integer idcontraente, Integer ecidContraente, NomiCognomiEntity nomeCognome) {
     return PadatisingoliEntity.builder()
         .iddatisingoli(idcontraente)
-        .ccognome(COGNOME + ecidContraente)
-        .cnome(NOME + ecidContraente)
+        .ccognome(nomeCognome.getCognome())
+        .cnome(nomeCognome.getNome())
         .necid(ecidContraente)
         .build();
   }

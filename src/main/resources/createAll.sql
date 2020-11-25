@@ -955,3 +955,19 @@ CREATE TABLE `vttab201` (
                             UNIQUE KEY `VTI02011` (`T201_CODSOC`,`T201_CODCLI`),
                             KEY `VTI02012` (`T201_CODSOC`,`T201_ABI`,`T201_NDG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE NOMECOGNOME (
+                             ID INT PRIMARY KEY AUTO_INCREMENT,
+                             NOME VARCHAR(20) NOT NULL,
+                             COGNOME VARCHAR(20)  NOT NULL,
+                             USATO BOOLEAN not null DEFAULT false,
+                             UNIQUE(NOME, COGNOME)
+);
+CREATE TABLE NOMI (
+    NOME VARCHAR(20)  PRIMARY KEY
+);
+CREATE TABLE COGNOMI(
+    COGNOME VARCHAR(20)  PRIMARY KEY
+);

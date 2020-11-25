@@ -14,4 +14,6 @@ select 'pgtitolo',count(*) from datalakearca.pgtitolo union
 select 'vttab022',count(*) from datalakearca.vttab022 union
 select 'vttab024',count(*) from datalakearca.vttab024 union
 select 'vttab200',count(*) from datalakearca.vttab200 union
-select 'vttab201',count(*) from datalakearca.vttab201;
+select 'vttab201',count(*) from datalakearca.vttab201 union
+SELECT 'nomi rimasti' , count(*) FROM datalakearca.nomi_cognomi where usato = 0;
+;

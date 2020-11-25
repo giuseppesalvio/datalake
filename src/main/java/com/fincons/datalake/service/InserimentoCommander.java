@@ -16,12 +16,12 @@ public class InserimentoCommander {
   @Autowired private ComComPostalAddressesRepository comComPostalAddressesRepository;
   @Autowired private ComMetaTerritoryRepository comMetaTerritoryRepository;
 
-  public int pf() {
+  public int pf(NomiCognomiEntity nomeCognome) {
     int ecid = getEcid();
     Integer metaTerritoryId = getCodice(comMetaTerritoryRepository);
     Integer comComPostalAddressesId = getCodice(comComPostalAddressesRepository);
 
-    comComNaturalPersonRepository.save(getPersonaFisica(ecid));
+    comComNaturalPersonRepository.save(getPersonaFisica(ecid,nomeCognome));
     comComMasterDataRepository.save(getMasterData(ecid));
     comComIdentificationDataRepository.save(getIdentificationDataFisica(ecid));
 
@@ -112,12 +112,12 @@ public class InserimentoCommander {
         .build();
   }
 
-  private static ComComNaturalpersonEntity getPersonaFisica(int ecid) {
+  private static ComComNaturalpersonEntity getPersonaFisica(int ecid, NomiCognomiEntity nomeCognome) {
     return ComComNaturalpersonEntity.builder()
         .id(ecid)
         .ecid(ecid)
-        .name(NOME+ ecid)
-        .surname(COGNOME + ecid)
+        .name(nomeCognome.getNome())
+        .surname(nomeCognome.getCognome())
         .build();
   }
 }

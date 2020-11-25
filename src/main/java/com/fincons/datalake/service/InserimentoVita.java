@@ -1,9 +1,6 @@
 package com.fincons.datalake.service;
 
-import com.fincons.datalake.entity.Vttab022Entity;
-import com.fincons.datalake.entity.Vttab024Entity;
-import com.fincons.datalake.entity.Vttab200Entity;
-import com.fincons.datalake.entity.Vttab201Entity;
+import com.fincons.datalake.entity.*;
 import com.fincons.datalake.repository.Vttab022Repository;
 import com.fincons.datalake.repository.Vttab024Repository;
 import com.fincons.datalake.repository.Vttab200Repository;
@@ -55,7 +52,7 @@ public class InserimentoVita {
             ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
   }
 
-  public void pf(Integer ecidContraente) {
+  public void pf(Integer ecidContraente, NomiCognomiEntity nomeCognome) {
     int randomMax = getRandomNumber(FOR_MAX_RANDOM_MIN_POLIZZA, FOR_MAX_RANDOM_MAX_POLIZZA);
 
     for (int i = 1; i < randomMax; i++) {
@@ -64,8 +61,8 @@ public class InserimentoVita {
       Date dataDecorrenza = getRandomDate();
 
       inserisciPolizzaVitaPF(
-          codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente);
-      inserisciContraente(ecidContraente, codiceContraenteVita);
+          codiceContraenteVita, codicePolizzaVita, dataDecorrenza, ecidContraente, nomeCognome);
+      inserisciContraente(ecidContraente, codiceContraenteVita, nomeCognome);
       // inserisciAltreFigure(codiceContraenteVita);
       inserisciPosizioni(codicePolizzaVita, dataDecorrenza);
     }
@@ -75,10 +72,11 @@ public class InserimentoVita {
       int codiceContraenteVita,
       int codicePolizzaVita,
       Date dataDecorrenza,
-      Integer ecidContraente) {
+      Integer ecidContraente,
+      NomiCognomiEntity nomeCognome) {
     polizaVitaRepository.save(
         getPolizzaPersonaFisica(
-            ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza));
+            ecidContraente, codiceContraenteVita, codicePolizzaVita, dataDecorrenza, nomeCognome));
   }
   //
   //  private void inserisciAltreFigure(int codiceContraenteVita) {
@@ -108,9 +106,11 @@ public class InserimentoVita {
     return temp + 1;
   }
 
-  private void inserisciContraente(int ecidContraente, int codiceClienteVita) {
-    personaVitaRepository.save(getPersonaFisica(ecidContraente, codiceClienteVita));
-    personaVitaEstesaRepository.save(getPersonaFisicaEstesa(ecidContraente, codiceClienteVita));
+  private void inserisciContraente(
+      int ecidContraente, int codiceClienteVita, NomiCognomiEntity nomeCognome) {
+    personaVitaRepository.save(getPersonaFisica(ecidContraente, codiceClienteVita, nomeCognome));
+    personaVitaEstesaRepository.save(
+        getPersonaFisicaEstesa(ecidContraente, codiceClienteVita, nomeCognome));
   }
 
   private void inserisciContraentePG(int ecidContraente, int codiceClienteVita) {
@@ -156,29 +156,31 @@ public class InserimentoVita {
     }
   }
 
-  private Vttab201Entity getPersonaFisicaEstesa(int ecidContraente, int codiceClienteVita) {
+  private Vttab201Entity getPersonaFisicaEstesa(
+      int ecidContraente, int codiceClienteVita, NomiCognomiEntity nomeCognome) {
     return Vttab201Entity.builder()
         .t201Codsoc(341)
-        .t201Codcli(codiceClienteVita) // stesso della 201
-        .t201Nome(NOME + ecidContraente)
-        .t201Cognome(COGNOME + ecidContraente)
+        .t201Codcli(codiceClienteVita)
+        .t201Nome(nomeCognome.getNome())
+        .t201Cognome(nomeCognome.getCognome())
         .build();
   }
 
   private Vttab201Entity getPersonaGiuridicaEstesa(int ecidContraente, int codiceClienteVita) {
     return Vttab201Entity.builder()
         .t201Codsoc(341)
-        .t201Codcli(codiceClienteVita) // stesso della 201
+        .t201Codcli(codiceClienteVita)
         .t201Cognome(IMPRESA_SRL + ecidContraente)
         .build();
   }
 
-  private Vttab200Entity getPersonaFisica(int ecidContraente, int codiceClienteVita) {
+  private Vttab200Entity getPersonaFisica(
+      int ecidContraente, int codiceClienteVita, NomiCognomiEntity nomeCognome) {
     return Vttab200Entity.builder()
         .t200Codsoc(341)
         .t200Codfisc(CF + ecidContraente)
-        .t200Nominativo(NOME + ecidContraente + " Rossi " + ecidContraente)
-        .t200Codcli(codiceClienteVita) // stesso della 201
+        .t200Nominativo(nomeCognome.getNome() + " " + nomeCognome.getCognome())
+        .t200Codcli(codiceClienteVita)
         .t200Codcommander(ecidContraente)
         .t200Indirizzo(VIA + ecidContraente)
         .t200IndirizzoD(VIA + ecidContraente)
@@ -235,14 +237,18 @@ public class InserimentoVita {
   }
 
   private static Vttab022Entity getPolizzaPersonaFisica(
-      int ecidContraente, int codiceContraenteVita, int codicePolizzaVita, Date dataDecorrenza) {
+      int ecidContraente,
+      int codiceContraenteVita,
+      int codicePolizzaVita,
+      Date dataDecorrenza,
+      NomiCognomiEntity nomeCognome) {
     return Vttab022Entity.builder()
         .t022Codsoc(341)
         .t022Categoria("I")
         .t022Agenzia("")
         .t022NumColl(0)
         .t022NumPolizza(codicePolizzaVita)
-        .t022Nominativo(NOME + ecidContraente + COGNOME + ecidContraente)
+        .t022Nominativo(nomeCognome.getNome() + " " + nomeCognome.getCognome())
         .t022Stato(randomStato())
         .t022CodContr(codiceContraenteVita)
         .t022Decorrenza(dataDecorrenza)
